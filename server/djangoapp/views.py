@@ -110,14 +110,14 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
-        url = 'https://9bebcb01.eu-de.apigw.appdomain.cloud/api/reviews?dealerId={dealer_id}'
+        url = 'https://9bebcb01.eu-de.apigw.appdomain.cloud/api/reviews?dealerId="{dealer_id}"'
         reviews = get_dealer_reviews_from_cf(url,dealer_id)
         context = {
             "reviews":  reviews, 
             "dealer_id": dealer_id
         }
 
-        return render(request, 'djangoapp/dealer_details.html', context)
+        return render(request, 'djangoapp/dealer_details.html', context,dealer_id=dealer_id)
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
@@ -154,10 +154,8 @@ def add_review(request, dealer_id):
             else: 
                 review["purchase_date"] = None
 
-            url = "https://9bebcb01.eu-de.apigw.appdomain.cloud/api/review"  # API Cloud Function route
-            json_payload = {"review": review}  # Create a JSON payload that contains the review data
-
-            # Performing a POST request with the review
+            url = "https://9bebcb01.eu-de.apigw.appdomain.cloud/api/review"  
+            json_payload = {"review": review}  
             result = post_request(url, json_payload, dealerId=dealer_id)
             if int(result.status_code) == 200:
                 print("Review posted successfully.")
