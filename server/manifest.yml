@@ -1,10 +1,10 @@
   applications:
-  - name: djangoapp2
+  - name: abdulcapstone
     routes:
       - route: abdulcapstone.eu-de.cf.appdomain.cloud
     memory: 128M
     buildpack: python_buildpack
-  - name: djangoapp-nginx2
+  - name: abdulcapstone-nginx2
     routes:
       - route: abdulcapstone.eu-de.cf.appdomain.cloud/static
     memory: 128M
