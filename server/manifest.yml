@@ -4,7 +4,7 @@
       - route: cardealerabdul.eu-de.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
-  - name: abdulcapstone-nginx2
+  - name: cardealerabdul-nginx2
     routes:
       - route: cardealerabdul.eu-de.mybluemix.net/static
     memory: 128M
