@@ -1,11 +1,11 @@
   applications:
   - name: cardealerabdul
     routes:
-      - route: cardealerabdul.eu-gb.mybluemix.net
+      - route: cardealerabdul.apic.eu-gb.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: cardealerabdul-nginx2
     routes:
-      - route: cardealerabdul.eu-gb.mybluemix.net/static
+      - route: cardealerabdul.apic.eu-gb.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
