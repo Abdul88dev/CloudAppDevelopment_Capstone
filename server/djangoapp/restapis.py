@@ -1,7 +1,9 @@
 import requests
 import json
-from .models import CarDealer
+import os
+from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
+from decouple import config
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson.natural_language_understanding_v1 import Features, SentimentOptions
@@ -99,48 +101,26 @@ def get_dealers_by_state(url, state):
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
-def get_dealer_reviews_from_cf(url, dealer_id):
+ef get_dealer_reviews_from_cf(url, dealer_id):
     results = []
-    # Perform a GET request with the specified dealer id
-    json_result = get_request(url, dealerId=dealer_id)
-
+    json_result = get_request(url, dealer_id=dealer_id)
     if json_result:
-        # Get all review data from the response
         reviews = json_result["body"]["data"]["docs"]
-        # For every review in the response
         for review in reviews:
-            # Create a DealerReview object from the data
-            # These values must be present
-            review_content = review["review"]
-            id = review["_id"]
-            name = review["name"]
-            purchase = review["purchase"]
-            dealership = review["dealership"]
-
             try:
-                # These values may be missing
-                car_make = review["car_make"]
-                car_model = review["car_model"]
-                car_year = review["car_year"]
-                purchase_date = review["purchase_date"]
-
-                # Creating a review object
-                review_obj = DealerReview(dealership=dealership, id=id, name=name, 
-                                          purchase=purchase, review=review_content, car_make=car_make, 
-                                          car_model=car_model, car_year=car_year, purchase_date=purchase_date
-                                          )
-
-            except KeyError:
-                print("Something is missing from this review. Using default values.")
-                # Creating a review object with some default values
-                review_obj = DealerReview(
-                    dealership=dealership, id=id, name=name, purchase=purchase, review=review_content)
-
-            # Analysing the sentiment of the review object's review text and saving it to the object attribute "sentiment"
+                review_obj = models.DealerReview(name = review["name"], 
+                dealership = review["dealership"], review = review["review"], purchase=review["purchase"],
+                purchase_date = review["purchase_date"], car_make = review['car_make'],
+                car_model = review['car_model'], car_year= review['car_year'], sentiment= "none")
+            except:
+                review_obj = models.DealerReview(name = review["name"], 
+                dealership = review["dealership"], review = review["review"], purchase=review["purchase"],
+                purchase_date = 'none', car_make = 'none',
+                car_model = 'none', car_year= 'none', sentiment= "none")
+                
             review_obj.sentiment = analyze_review_sentiments(review_obj.review)
-            print(f"sentiment: {review_obj.sentiment}")
-
-            # Saving the review object to the list of results
+            print(review_obj.sentiment)
+                    
             results.append(review_obj)
 
     return results
