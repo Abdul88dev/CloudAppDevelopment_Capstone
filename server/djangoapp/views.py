@@ -137,7 +137,7 @@ def add_review(request, dealer_id):
         if request.method == "POST":
             form = request.POST
             review = dict()
-            review["name"] = f"{request.user.first_name} {request.user.last_name}"
+            review["name"] = "{request.user.first_name} {request.user.last_name}"
             review["dealership"] = dealer_id
             review["review"] = form["content"]
             review["purchase"] = form.get("purchasecheck")
